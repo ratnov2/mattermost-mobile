@@ -1,26 +1,26 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, { useEffect, useMemo } from "react";
-import { defineMessages } from "react-intl";
-import { Text, View, type TextStyle } from "react-native";
+import React, {useEffect, useMemo} from 'react';
+import {defineMessages} from 'react-intl';
+import {Text, View, type TextStyle} from 'react-native';
 
-import { fetchProfilesInChannel } from "@actions/remote/user";
-import FormattedText from "@components/formatted_text";
-import { BotTag } from "@components/tag";
-import { General, NotificationLevel } from "@constants";
-import { useServerUrl } from "@context/server";
-import { makeStyleSheetFromTheme } from "@utils/theme";
-import { typography } from "@utils/typography";
-import { getUserIdFromChannelName } from "@utils/user";
+import {fetchProfilesInChannel} from '@actions/remote/user';
+import FormattedText from '@components/formatted_text';
+import {BotTag} from '@components/tag';
+import {General, NotificationLevel} from '@constants';
+import {useServerUrl} from '@context/server';
+import {makeStyleSheetFromTheme} from '@utils/theme';
+import {typography} from '@utils/typography';
+import {getUserIdFromChannelName} from '@utils/user';
 
-import IntroOptions from "../options";
+import IntroOptions from '../options';
 
-import Group from "./group";
-import Member from "./member";
+import Group from './group';
+import Member from './member';
 
-import type ChannelModel from "@typings/database/models/servers/channel";
-import type ChannelMembershipModel from "@typings/database/models/servers/channel_membership";
+import type ChannelModel from '@typings/database/models/servers/channel';
+import type ChannelMembershipModel from '@typings/database/models/servers/channel_membership';
 
 type Props = {
     channel: ChannelModel;
@@ -35,8 +35,8 @@ type Props = {
 
 const getStyleSheet = makeStyleSheetFromTheme((theme: Theme) => ({
     displayNameContainer: {
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
         gap: 4,
     },
     botText: {
@@ -44,58 +44,58 @@ const getStyleSheet = makeStyleSheetFromTheme((theme: Theme) => ({
         lineHeight: 20,
     },
     container: {
-        alignItems: "center",
+        alignItems: 'center',
         marginHorizontal: 20,
     },
     message: {
         color: theme.centerChannelColor,
         marginTop: 8,
-        textAlign: "center",
-        ...typography("Body", 200, "Regular"),
+        textAlign: 'center',
+        ...typography('Body', 200, 'Regular'),
     },
     boldText: {
-        ...typography("Body", 200, "SemiBold"),
+        ...typography('Body', 200, 'SemiBold'),
     },
     profilesContainer: {
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     title: {
         color: theme.centerChannelColor,
         marginTop: 4,
-        textAlign: "center",
-        ...typography("Heading", 700, "SemiBold"),
+        textAlign: 'center',
+        ...typography('Heading', 700, 'SemiBold'),
     },
     titleGroup: {
-        ...typography("Heading", 600, "SemiBold"),
+        ...typography('Heading', 600, 'SemiBold'),
     },
 }));
 
 const gmIntroMessages = defineMessages({
     muted: {
-        id: "intro.group_message.muted",
+        id: 'intro.group_message.muted',
         defaultMessage:
-            "This group message is currently <b>muted</b>, so you will not be notified.",
+            'This group message is currently <b>muted</b>, so you will not be notified.',
     },
     [NotificationLevel.ALL]: {
-        id: "intro.group_message.all",
+        id: 'intro.group_message.all',
         defaultMessage:
             "You'll be notified <b>for all activity</b> in this group message.",
     },
     [NotificationLevel.DEFAULT]: {
-        id: "intro.group_message.all",
+        id: 'intro.group_message.all',
         defaultMessage:
             "You'll be notified <b>for all activity</b> in this group message.",
     },
     [NotificationLevel.MENTION]: {
-        id: "intro.group_message.mention",
+        id: 'intro.group_message.mention',
         defaultMessage:
-            "You have selected to be notified <b>only when mentioned</b> in this group message.",
+            'You have selected to be notified <b>only when mentioned</b> in this group message.',
     },
     [NotificationLevel.NONE]: {
-        id: "intro.group_message.none",
+        id: 'intro.group_message.none',
         defaultMessage:
-            "You have selected to <b>never</b> be notified in this group message.",
+            'You have selected to <b>never</b> be notified in this group message.',
     },
 });
 
@@ -104,7 +104,7 @@ const getGMIntroMessageSpecificPart = (
     channelNotifyProps: Partial<ChannelNotifyProps> | undefined,
     boldStyle: TextStyle,
 ) => {
-    const isMuted = channelNotifyProps?.mark_unread === "mention";
+    const isMuted = channelNotifyProps?.mark_unread === 'mention';
     if (isMuted) {
         return (
             <FormattedText
@@ -174,11 +174,11 @@ const DirectChannel = ({
             return (
                 <FormattedText
                     defaultMessage={
-                        "This is the start of your conversation with {teammate}. Messages and files shared here are not shown to anyone else."
+                        'This is the start of your conversation with {teammate}. Messages and files shared here are not shown to anyone else.'
                     }
-                    id="intro.direct_message"
+                    id='intro.direct_message'
                     style={styles.message}
-                    values={{ teammate: channel.displayName }}
+                    values={{teammate: channel.displayName}}
                 />
             );
         }
@@ -186,9 +186,9 @@ const DirectChannel = ({
             return (
                 <FormattedText
                     defaultMessage={
-                        "This is the start of your conversation with this group. Messages and files shared here are not shown to anyone else outside of the group."
+                        'This is the start of your conversation with this group. Messages and files shared here are not shown to anyone else outside of the group.'
                     }
-                    id="intro.group_message.after_gm_as_dm"
+                    id='intro.group_message.after_gm_as_dm'
                     style={styles.message}
                 />
             );
@@ -197,9 +197,9 @@ const DirectChannel = ({
             <Text style={styles.message}>
                 <FormattedText
                     defaultMessage={
-                        "This is the start of your conversation with this group."
+                        'This is the start of your conversation with this group.'
                     }
-                    id="intro.group_message.common"
+                    id='intro.group_message.common'
                 />
                 <Text> </Text>
                 {getGMIntroMessageSpecificPart(
@@ -233,7 +233,7 @@ const DirectChannel = ({
             return (
                 <Member
                     channelId={channel.id}
-                    containerStyle={{ height: 96 }}
+                    containerStyle={{height: 96}}
                     member={teammate}
                     size={96}
                     theme={theme}
@@ -266,11 +266,11 @@ const DirectChannel = ({
                             ? styles.titleGroup
                             : undefined,
                     ]}
-                    testID="channel_post_list.intro.display_name"
+                    testID='channel_post_list.intro.display_name'
                 >
                     {channel.displayName}
                 </Text>
-                {isBot && <BotTag size={"m"} />}
+                {isBot && <BotTag size={'m'}/>}
             </View>
             {message}
             <IntroOptions
